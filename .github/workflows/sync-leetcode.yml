@@ -6,6 +6,10 @@ on:
     # problems, so keep this frequent when running without secrets.
     - cron: "23 */4 * * *"
   workflow_dispatch:
+  # The browser extension updates data/solved.json; re-render the README table.
+  push:
+    paths:
+      - data/solved.json
 
 permissions:
   contents: write
@@ -43,4 +47,6 @@ jobs:
             exit 0
           fi
           git commit -F "$RUNNER_TEMP/commit_msg"
+          # The extension may have pushed while this job ran.
+          git pull --rebase
           git push

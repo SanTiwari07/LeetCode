@@ -7,7 +7,23 @@ My [LeetCode](https://leetcode.com/u/cmy7RSNHvA/) solutions, synced automaticall
 _The problem list appears here after the first sync._
 <!-- LEETCODE-SYNC:END -->
 
-## How the sync works
+## Browser extension (instant sync with code)
+
+The [`extension/`](extension) folder is a Chrome extension that pushes your code to this repo the
+moment LeetCode says **Accepted**. It's the easiest way to get your solutions in.
+
+1. Download this repo (**Code → Download ZIP**) and unzip it, or `git clone` it.
+2. Open `chrome://extensions`, turn on **Developer mode**, click **Load unpacked**, and pick the
+   `extension` folder.
+3. Create a [fine-grained GitHub token](https://github.com/settings/personal-access-tokens/new):
+   **Repository access** → only this repo, **Permissions** → **Contents: Read and write**.
+4. Click the extension icon → **Settings**, paste the token, then click **Test connection**.
+
+Now solve a problem. When it's accepted you'll see a "Pushed to GitHub" toast, and a commit like
+`Add 1. Two Sum (python3)` appears here. The extension icon's popup shows recent syncs and lets you
+retry a failed one.
+
+## How the scheduled sync works
 
 [`scripts/sync_leetcode.py`](scripts/sync_leetcode.py) runs on a schedule (and on demand from the
 **Actions** tab → **Sync LeetCode** → **Run workflow**). Each problem gets a folder under
