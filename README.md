@@ -1,0 +1,26 @@
+# LeetCode Solutions
+
+My [LeetCode](https://leetcode.com/u/cmy7RSNHvA/) solutions, synced automatically by
+[a GitHub Action](.github/workflows/sync-leetcode.yml) every 4 hours.
+
+<!-- LEETCODE-SYNC:START -->
+_The problem list appears here after the first sync._
+<!-- LEETCODE-SYNC:END -->
+
+## How the sync works
+
+[`scripts/sync_leetcode.py`](scripts/sync_leetcode.py) runs on a schedule (and on demand from the
+**Actions** tab → **Sync LeetCode** → **Run workflow**). Each problem gets a folder under
+`problems/` with its description and solutions, and the table above is regenerated.
+
+- **Without secrets**, it uses LeetCode's public API, which only shows your 20 most recent
+  accepted problems and no code. Problems are added as you solve them, but not your code.
+- **With secrets**, it imports your full history plus the code of your latest accepted
+  submission in each language. To enable it:
+  1. Log in to leetcode.com, open DevTools → Application → Cookies → `https://leetcode.com`.
+  2. Copy the values of the `LEETCODE_SESSION` and `csrftoken` cookies.
+  3. In this repo, go to **Settings → Secrets and variables → Actions** and add the repository
+     secrets `LEETCODE_SESSION` and `LEETCODE_CSRF_TOKEN`.
+
+  The session cookie expires every few weeks. When it does, the run shows a warning and keeps
+  syncing without code until you paste in fresh cookie values.
