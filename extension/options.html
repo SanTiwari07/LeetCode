@@ -2,30 +2,39 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>LeetCode → GitHub Sync settings</title>
+  <title>LeetCode Sync settings</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body class="options">
-  <h1>LeetCode → GitHub Sync</h1>
-  <p class="muted">Every accepted submission is pushed to this repository.</p>
+  <h1>LeetCode Sync</h1>
+  <p class="muted">Saves every LeetCode problem you attempt to a GitHub repository, sorted by topic.</p>
 
-  <label>GitHub username or org
+  <label>GitHub username
     <input id="owner" placeholder="SanTiwari07" autocomplete="off">
   </label>
   <label>Repository
-    <input id="repo" placeholder="LeetCode" autocomplete="off">
+    <input id="repo" placeholder="LeetCodeSolved" autocomplete="off">
   </label>
   <label>Branch <span class="muted">(blank = the repo's default branch)</span>
     <input id="branch" placeholder="main" autocomplete="off">
   </label>
   <label>GitHub token
-    <input id="token" type="password" placeholder="github_pat_…" autocomplete="off">
+    <input id="token" type="password" placeholder="github_pat_..." autocomplete="off">
   </label>
   <p class="muted small">
     Create a <a href="https://github.com/settings/personal-access-tokens/new" target="_blank">fine-grained token</a>:
-    <b>Repository access</b> → only this repository, <b>Permissions</b> → Contents: <b>Read and write</b>.
+    <b>Repository access</b> &gt; only this repository, <b>Permissions</b> &gt; Contents: <b>Read and write</b>.
     The token is stored only in this browser.
   </p>
+
+  <label class="check">
+    <input id="saveAttempts" type="checkbox">
+    Save attempts that weren't accepted (Wrong Answer, Time Limit Exceeded, ...)
+  </label>
+  <label class="check">
+    <input id="autoSync" type="checkbox">
+    Catch up automatically when I open LeetCode (picks up problems solved on another device)
+  </label>
 
   <div class="row">
     <button id="save">Save</button>

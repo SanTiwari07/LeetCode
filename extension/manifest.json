@@ -1,24 +1,37 @@
 {
   "manifest_version": 3,
-  "name": "LeetCode → GitHub Sync",
-  "version": "1.0.0",
-  "description": "Pushes your accepted LeetCode solutions to a GitHub repository automatically.",
-  "permissions": ["storage"],
-  "host_permissions": ["https://api.github.com/*"],
+  "name": "LeetCode Sync",
+  "version": "2.0.0",
+  "description": "Saves every LeetCode problem you attempt to a GitHub repository, sorted by topic.",
+  "permissions": [
+    "storage"
+  ],
+  "host_permissions": [
+    "https://api.github.com/*",
+    "https://leetcode.com/*"
+  ],
   "background": {
     "service_worker": "background.js",
     "type": "module"
   },
   "content_scripts": [
     {
-      "matches": ["https://leetcode.com/*"],
-      "js": ["page_hook.js"],
+      "matches": [
+        "https://leetcode.com/*"
+      ],
+      "js": [
+        "page_hook.js"
+      ],
       "run_at": "document_start",
       "world": "MAIN"
     },
     {
-      "matches": ["https://leetcode.com/*"],
-      "js": ["content.js"],
+      "matches": [
+        "https://leetcode.com/*"
+      ],
+      "js": [
+        "content.js"
+      ],
       "run_at": "document_start"
     }
   ],

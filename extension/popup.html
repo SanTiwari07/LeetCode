@@ -6,10 +6,16 @@
 </head>
 <body class="popup">
   <header>
-    <strong>LeetCode → GitHub</strong>
+    <strong>LeetCode Sync</strong>
     <a href="#" id="settings">Settings</a>
   </header>
   <p id="target" class="muted small"></p>
+  <div class="row">
+    <button id="sync" title="Save anything new since the last sync">Sync now</button>
+    <button id="import" class="secondary" title="Re-read your whole LeetCode history">Import full history</button>
+  </div>
+  <p id="sync-status" class="small"></p>
+  <h2>Recent</h2>
   <ul id="history"></ul>
   <script src="popup.js"></script>
 </body>
