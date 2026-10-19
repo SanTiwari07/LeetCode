@@ -102,7 +102,8 @@ export function planSync(state, listed) {
     if (isBetter(submission, problem && problem.languages[submission.lang])) codeIds.push(submission.id);
   }
   const slugs = [...oldest.keys()].sort((a, b) => oldest.get(a) - oldest.get(b));
-  return { slugs, codeIds, count: fresh.length };
+  const newSlugs = slugs.filter((slug) => !state.problems[slug]).length;
+  return { slugs, newSlugs, codeIds, count: fresh.length };
 }
 
 /**

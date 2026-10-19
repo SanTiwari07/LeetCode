@@ -162,6 +162,9 @@ async function runSync(full, { quiet = false } = {}) {
     const batches = Math.max(1, Math.ceil(plan.slugs.length / BATCH_SIZE));
     let saved = 0;
     let url = null;
+    // Anything LeetCode wouldn't give us is left out, and synced_through stays
+    // put, so the next sync tries those submissions again.
+    let incomplete = false;
 
     for (let batch = 0; batch < batches; batch++) {
       const slugs = plan.slugs.slice(batch * BATCH_SIZE, (batch + 1) * BATCH_SIZE);
@@ -171,7 +174,10 @@ async function runSync(full, { quiet = false } = {}) {
         progress(`Saving problems: ${saved + Object.keys(questions).length + 1} of ${plan.slugs.length}`);
         const { question } = await graphql(QUESTION_QUERY, { titleSlug: slug });
         await sleep(DELAY_MS);
-        if (!question) continue;
+        if (!question) {
+          incomplete = true;
+          continue;
+        }
         questions[slug] = {
           id: question.questionFrontendId,
           title: question.title,
@@ -184,11 +190,13 @@ async function runSync(full, { quiet = false } = {}) {
           if (codeIds.has(item.id)) {
             const details = (await graphql(SUBMISSION_DETAILS_QUERY, { submissionId: item.id })).submissionDetails;
             await sleep(DELAY_MS);
-            if (details && details.code != null) {
-              submission.code = details.code;
-              submission.runtime = cleanStat(details.runtimeDisplay);
-              submission.memory = cleanStat(details.memoryDisplay);
+            if (!details || details.code == null) {
+              incomplete = true;
+              continue;
             }
+            submission.code = details.code;
+            submission.runtime = cleanStat(details.runtimeDisplay);
+            submission.memory = cleanStat(details.memoryDisplay);
           }
           submissions.push(submission);
         }
@@ -199,21 +207,23 @@ async function runSync(full, { quiet = false } = {}) {
         type: "sync-batch",
         submissions,
         questions,
-        syncedThrough: last ? newest : 0,
+        syncedThrough: last && !incomplete ? newest : 0,
         label: batches > 1 ? `${label} (${batch + 1}/${batches})` : label,
       });
       saved += slugs.length;
       url = result.url || url;
     }
 
-    const text = plan.slugs.length
-      ? `${importing ? "Imported" : "Synced"} ${plan.slugs.length} problem${plan.slugs.length === 1 ? "" : "s"}`
-      : "Everything is up to date";
+    const updated = plan.slugs.length - plan.newSlugs;
+    const parts = [];
+    if (plan.newSlugs) parts.push(`${plan.newSlugs} new problem${plan.newSlugs === 1 ? "" : "s"}`);
+    if (updated) parts.push(`${updated} updated`);
+    const text = parts.length ? `Saved ${parts.join(", ")}` : "Everything is up to date";
     await send({ type: "sync-end", ok: true, text, url, problems: plan.slugs.length });
     if (loud) toast(`${text}.`, "success", url);
   } catch (error) {
     await chrome.runtime.sendMessage({ type: "sync-end", ok: false, text: error.message }).catch(() => {});
-    toast(`Sync failed: ${error.message}`, "error");
+    if (loud) toast(`Sync failed: ${error.message}`, "error");
   } finally {
     syncing = false;
   }

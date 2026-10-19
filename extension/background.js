@@ -306,14 +306,19 @@ async function startSync(full) {
   return { ok: true };
 }
 
+// Resolves when the tab finishes loading, or after 30s so a page that never
+// loads (offline) ends in an error instead of a popup stuck on "Starting...".
 function waitForLoad(tabId) {
   return new Promise((resolve) => {
-    const listener = (id, info) => {
-      if (id === tabId && info.status === "complete") {
-        chrome.tabs.onUpdated.removeListener(listener);
-        resolve();
-      }
+    const done = () => {
+      clearTimeout(timer);
+      chrome.tabs.onUpdated.removeListener(listener);
+      resolve();
     };
+    const listener = (id, info) => {
+      if (id === tabId && info.status === "complete") done();
+    };
+    const timer = setTimeout(done, 30 * 1000);
     chrome.tabs.onUpdated.addListener(listener);
   });
 }
