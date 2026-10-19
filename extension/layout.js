@@ -202,7 +202,13 @@ export function applySubmissions(state, submissions, questions) {
 
 /** README files that summarize the whole repo, plus the state file itself. */
 export function indexFiles(state) {
-  const files = { "README.md": rootReadme(state), [STATE_PATH]: serializeState(state) };
+  const files = {
+    "README.md": rootReadme(state),
+    [STATE_PATH]: serializeState(state),
+    // GitHub counts .sql files as data, so SQL solutions would be missing from
+    // the repo's language bar without this.
+    ".gitattributes": "*.sql linguist-detectable=true\n",
+  };
   for (const [folder, problems] of byTopic(state)) {
     files[`${folder}/README.md`] = topicReadme(state, folder, problems);
   }
