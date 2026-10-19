@@ -45,7 +45,8 @@ async function github(token, method, path, body, { raw = false } = {}) {
     },
     body: body ? JSON.stringify(body) : undefined,
   });
-  if (response.status === 404 && method === "GET") return null;
+  // 404 is a missing file or branch; 409 is "Git Repository is empty".
+  if ((response.status === 404 || response.status === 409) && method === "GET") return null;
   if (response.ok && raw) return response.text();
   const data = response.status === 204 ? null : await response.json().catch(() => null);
   if (!response.ok) {
