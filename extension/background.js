@@ -37,6 +37,9 @@ async function settings() {
 async function github(token, method, path, body, { raw = false } = {}) {
   const response = await fetch(`${API}${path}`, {
     method,
+    // GitHub marks API responses cacheable for 60s; a cached branch head makes
+    // every commit after the first one fail with "not a fast forward".
+    cache: "no-store",
     headers: {
       Authorization: `Bearer ${token}`,
       Accept: raw ? "application/vnd.github.raw+json" : "application/vnd.github+json",
@@ -123,8 +126,10 @@ async function commitWith(build) {
     try {
       await github(token, "PATCH", `${base}/git/refs/heads/${encodeURIComponent(branch)}`, { sha: commit.sha });
     } catch (error) {
-      if (error.status === 422 && attempt < 4) continue; // Not a fast-forward; rebuild on the new head.
-      throw error;
+      if (error.status !== 422 || attempt === 4) throw error;
+      // Not a fast-forward: someone else committed. Rebuild on the new head.
+      await new Promise((resolve) => setTimeout(resolve, 1000 * (attempt + 1)));
+      continue;
     }
     return { ...change, files: undefined, url: `https://github.com/${owner}/${repo}/commit/${commit.sha}` };
   }
@@ -267,7 +272,7 @@ async function syncEnd({ ok, text, url, problems }) {
     await log({
       key: `sync-${Date.now()}`,
       title: ok ? text : "Sync failed",
-      detail: ok ? "" : text,
+      detail: "",
       ok,
       url: url || null,
       time: Date.now(),
