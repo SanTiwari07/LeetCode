@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "name": "LeetCode Sync",
+  "name": "LeetCode Tracker",
   "version": "2.0.0",
   "description": "Saves every LeetCode problem you attempt to a GitHub repository, sorted by topic.",
   "permissions": [

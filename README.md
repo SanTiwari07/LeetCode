@@ -77,7 +77,7 @@ Works in Chrome, Edge, Brave and other Chromium browsers.
    > Pick `LeetCodeTracker-main/extension`, not the outer `LeetCodeTracker-main` folder.
    > Choosing the outer folder gives the error "Manifest file is missing or unreadable".
 
-5. Click the puzzle-piece icon in Chrome's toolbar and pin **LeetCode Sync** so it's easy to reach.
+5. Click the puzzle-piece icon in Chrome's toolbar and pin **LeetCode Tracker** so it's easy to reach.
 
 ### Step 3. Make a GitHub token
 
@@ -164,7 +164,7 @@ The popup shows your recent saves. If one failed (for example, you were offline)
 ## Updating the extension
 
 Download the new version (or `git pull`), then go to `chrome://extensions` and click the reload
-icon on **LeetCode Sync**. Your settings are kept.
+icon on **LeetCode Tracker**. Your settings are kept.
 
 ## Troubleshooting
 
