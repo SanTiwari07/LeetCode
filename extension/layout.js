@@ -65,6 +65,24 @@ function isBetter(candidate, current) {
   return candidate.id > current.id;
 }
 
+// Tags that describe a general technique rather than what a problem is about.
+// LeetCode sometimes lists one first (Number of 1 Bits: Divide and Conquer,
+// Bit Manipulation), so they only become the main topic when nothing else fits.
+const GENERAL_TAGS = new Set([
+  "Brainteaser",
+  "Divide and Conquer",
+  "Enumeration",
+  "Interactive",
+  "Iterator",
+  "Memoization",
+  "Recursion",
+  "Simulation",
+]);
+
+export function mainTopic(tags) {
+  return tags.find((tag) => !GENERAL_TAGS.has(tag)) || tags[0] || "Other";
+}
+
 function topicFolder(topic) {
   return topic.replace(/[^A-Za-z0-9]+/g, "-").replace(/^-+|-+$/g, "") || "Other";
 }
@@ -72,7 +90,7 @@ function topicFolder(topic) {
 function problemFolder(question, slug) {
   const id = String(question.id);
   const prefix = /^\d+$/.test(id) ? id.padStart(4, "0") : id.replace(/\W+/g, "-");
-  return `${topicFolder(question.tags[0] || "Other")}/${prefix}-${slug}`;
+  return `${topicFolder(mainTopic(question.tags))}/${prefix}-${slug}`;
 }
 
 /**
@@ -128,7 +146,7 @@ export function applySubmissions(state, submissions, questions) {
         slug: submission.slug,
         difficulty: question.difficulty,
         tags: question.tags,
-        topic: question.tags[0] || "Other",
+        topic: mainTopic(question.tags),
         dir: problemFolder(question, submission.slug),
         first_attempt_at: submission.timestamp,
         last_attempt_at: submission.timestamp,
@@ -245,7 +263,7 @@ function counts(problems) {
   return result;
 }
 
-function problemReadme(problem, content) {
+export function problemReadme(problem, content) {
   const latestFirst = [...problem.submissions].reverse();
   const lines = [
     `# [${problem.id}. ${problem.title}](${leetcodeUrl(problem)})`,
