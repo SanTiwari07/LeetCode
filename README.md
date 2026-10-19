@@ -56,13 +56,34 @@ Works in Chrome, Edge, Brave and other Chromium browsers.
 
 4. Click the puzzle-piece icon in the toolbar and pin **LeetCode Sync** so it's easy to reach.
 
-### 3. Give it access to your repo
+### 3. Make a GitHub token
+
+The token lets the extension save files to your solutions repo, and nothing else.
 
 1. Open [github.com/settings/personal-access-tokens/new](https://github.com/settings/personal-access-tokens/new).
-2. Give it a name, and set **Expiration** to whatever you're comfortable with.
-3. **Repository access:** Only select repositories > your solutions repo.
-4. **Permissions > Repository permissions > Contents:** Read and write.
-5. Click **Generate token** and copy it.
+2. **Token name:** anything, for example `LeetCode Tracker`.
+3. **Expiration:** pick one. "No expiration" is easiest; with a date, you'll make a new token when
+   it runs out.
+4. **Repository access:** choose **Only select repositories**, open **Select repositories**, and
+   pick your solutions repo (for example `LeetCodeSolved`).
+5. **Permissions:** click **+ Add permissions**, tick **Contents**, and close the list. Next to
+   **Contents**, change **Read-only** to **Read and write**. GitHub adds **Metadata: Read-only**
+   on its own; leave it.
+
+   Don't add any other permissions. The extension doesn't need them.
+
+6. Click **Generate token**. A box pops up to confirm. It should show exactly this:
+
+   | Permission | Access |
+   |---|---|
+   | Contents | Read and write |
+   | Metadata | Read-only |
+
+   If it does, click **Generate token** in the box.
+7. **Copy the token now** (it starts with `github_pat_`). GitHub shows it only once. If you lose
+   it, just make a new one.
+
+Keep the token private: paste it only into the extension, never into chats or code.
 
 ### 4. Connect
 
